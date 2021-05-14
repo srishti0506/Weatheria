@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./styles.css">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./Hamburger.css">
+    <link rel="stylesheet" type="text/css" href="./loader.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
         integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
@@ -81,10 +82,10 @@
                                     </div>
 
                                     <div id="weather-cloth">
-                                    	<div id="loading-info">Loading....</div>
+                                    	<div id="loading-info"><div class="loader"></div></div>
                                         <div class="weather loaded">
                                             <h2 class="city"></h2>
-                                            <h1 class="temp">°</h1>
+                                            <h1 class="temp"></h1>
                                             <div class="flex">
                                                 <img class="icon" />
                                                 <div class="description"></div>
@@ -102,7 +103,7 @@
                                     <div>
                                         <button style="width: 100px; border-radius: 30px;" id="ShowHide">More Details</button>
                                         <br>
-                                        <span id="graph-loading" align="center"></span>
+                                        <span id="graph-loading" style="left: 30%;"></span>
                                         <!-- <button style="width: 100px; border-radius: 0%;" class="show-btn">Show Details</button> -->
             
                                     </div>
@@ -125,16 +126,16 @@
             <div class="Hamburger">
                 <ul>
                     <li>
-                        <i class="fa fa-home">    <a href="./index.html" style="--i:0.05s">Home</a></i>
+                        <a href="./index.html" style="--i:0.005s"><i class="fa fa-home">    Home</i></a>
                     </li>
                     <li>
-                        <i class="fa fa-map-marker">    <a href="./map/map.html" style="--i:0.10s">Map</a></i>
+                        <a href="./map/map.html" style="--i:0.010s"><i class="fa fa-map-marker">    Map</i></a>
                     </li>
                     <li>
-                        <i class="fa fa-user">    <a href="./about/about.html" style="--i:0.35s">About</a></i>
+                        <a href="./about/about.html" style="--i:0.035s"><i class="fa fa-user">    About</i></a>
                     </li>
                     <li>
-                        <i class="fa fa-address-card">    <a href="./contact/contact.html" style="--i:0.4s">Contact</a></i>
+                        <a href="./contact/contact.html" style="--i:0.004s"><i class="fa fa-address-card">    Contact</i></a>
                     </li>
                 </ul>
             </div>
@@ -145,19 +146,19 @@
         setTimeout(
             function () {
                 $(".wish-img").animate({
-                    height: '50px',
-                    width: '50px',
+                    height: '52px',
+                    width: '52px',
                 });
 
                 $("#wish-text").animate({
-                    fontSize: '40px',
+                    fontSize: '65px',
                 });
 
                 $(".wish-img").animate({
                 	left: '10px',
                 });
             }
-            , 2000);
+            , 1000);
 
         let ele = document.getElementById("wish-text");
         var day = new Date();
@@ -166,16 +167,16 @@
 
         let str = "";
         if (hr >= 0 && hr < 12) {
-            str = "<b>!Good Morning!</b>";
+            str = "<b>Good Morning!</b>";
             imgSrc = "./Images/Morning.png";
         } else if (hr == 12) {
-            str = "!Good Noon!";
+            str = "Good Noon!";
             imgSrc = "./Images/sleep.png"
-        } else if (hr >= 12 && hr <= 17) {
-            str = "<b>!Good Afternoon!</b>";
+        } else if (hr >= 12 && hr <= 16) {
+            str = "<b>Good Afternoon!</b>";
             imgSrc = "./Images/sleep.png"
         } else {
-            str = "<b>!Good Evening!</b>";
+            str = "<b>Good Evening!</b>";
             imgSrc = "./Images/Night.png"
         }
         ele.innerHTML = "<img style='transform: rotateY(180deg);' class='wish-img greeting' src=" + imgSrc + "> " + str + " <img class='wish-img greeting' src=" + imgSrc + ">";

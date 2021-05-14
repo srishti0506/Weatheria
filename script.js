@@ -4,12 +4,72 @@ let update = {
 
   displayWeather: function (data) {
     
+
+    // console.log(data.weather[0].main);
+
     const { name } = data;
     const { icon, description, main } = data.weather[0];
     const { temp, humidity } = data.main;
     const { speed } = data.wind;
     const { deg } = data.wind;
     this.cityName = name;
+
+    // setting background according to atmosphere :
+
+    
+    let type = data.weather[0].main;
+    let Src = "";
+
+    if(type === "Thunderstorm"){
+
+      Src="./Images/thunderS.jpg"
+
+    }else if(type==="Drizzle"){
+
+      Src="./Images/drizzle.jpg"
+
+    }else if(type==="Rain"){
+
+      Src="./Images/rain.jpg"
+
+    }else if(type==="Snow"){
+
+      var day = new Date();
+      var hr = day.getHours();
+
+      if (hr >= 0 && hr < 12) {
+          Src = "./Images/belowZeroM.jpg";
+
+      } else if (hr >= 12 && hr <= 17) {
+          Src = "./Images/belowZero.jpg"
+      } else {
+          Src = "./Images/belowZeroN.jpg"
+      }
+    }else if(type==="Fog"){
+
+      Src = "./Images/FOG.jpg";
+      
+    }else if(type==="Clear"){
+
+      var day = new Date();
+      var hr = day.getHours();
+
+      if (hr >= 0 && hr < 12) {
+          Src = "./Images/summerM.jpg";
+
+      } else if (hr >= 12 && hr <= 17) {
+          Src = "./Images/summerE.jpg"
+      } else {
+          Src = "./Images/clearN.jpg"
+      }
+    }else{
+      Src = "./Images/thunderStorm.jpg";
+    }
+
+    $("header").css("background","url("+Src+ ") no-repeat center/cover");
+  
+
+
 
     document.querySelector(".city").innerText = "" + name;
     document.querySelector(".icon").src = "https://openweathermap.org/img/wn/" + icon + ".png";
@@ -21,22 +81,22 @@ let update = {
     document.querySelector(".wind").innerText = "Wind speed: " + speed + " km/h";
     
     let dir; // setting direction according to the angle of the wind
-    if(deg>348.75 || deg<=11.25)dir = "N";
-    else if(deg>11.25 && deg<=33.75)dir = "NNE";
-    else if(deg>33.75 && deg<=56.25)dir = "NE";
-    else if(deg>56.25 && deg<=78.75)dir = "ENE";
-    else if(deg>78.75 && deg<=101.25)dir = "E";
-    else if(deg>101.25 && deg<=123.75)dir = "ESE";
-    else if(deg>123.75 && deg<=146.25)dir = "SE";
-    else if(deg>146.25 && deg<=168.75)dir = "SSE";
-    else if(deg>168.75 && deg<=191.25)dir = "S";
-    else if(deg>191.25 && deg<=213.75)dir = "SSW";
-    else if(deg>213.75 && deg<=236.25)dir = "SW";
-    else if(deg>236.25 && deg<=258.75)dir = "WSW";
-    else if(deg>258.75 && deg<=281.25)dir = "W";
-    else if(deg>281.25 && deg<=303.75)dir = "WNW";
-    else if(deg>303.75 && deg<=326.25)dir = "NW";
-    else if(deg>326.25 && deg<=248.75)dir = "NNW";
+    if(deg>348 || deg<=11)dir = "N";
+    else if(deg>11 && deg<=33)dir = "NNE";
+    else if(deg>33 && deg<=56)dir = "NE";
+    else if(deg>56 && deg<=78)dir = "ENE";
+    else if(deg>78 && deg<=101)dir = "E";
+    else if(deg>101 && deg<=123)dir = "ESE";
+    else if(deg>123 && deg<=146)dir = "SE";
+    else if(deg>146 && deg<=168)dir = "SSE";
+    else if(deg>168 && deg<=191)dir = "S";
+    else if(deg>191 && deg<=213)dir = "SSW";
+    else if(deg>213 && deg<=236)dir = "SW";
+    else if(deg>236 && deg<=258)dir = "WSW";
+    else if(deg>258 && deg<=281)dir = "W";
+    else if(deg>281 && deg<=303)dir = "WNW";
+    else if(deg>303 && deg<=326)dir = "NW";
+    else if(deg>326 && deg<=348)dir = "NNW";
 
     document.querySelector(".wind-dir").innerText = "Wind Direction: " + dir + "("+ deg + "°"+")";
 
@@ -232,19 +292,63 @@ async function generateGraphs(place) {
     info += "Description: " + customData.description[idx];
     return info;
   }
-  let hr_graph = graph(h_graphEle, plots, { borderColor: '#0E4068', backgroundColor: 'rgba(255, 99, 132, 0.2)', pntStyle: 'circle', radius: 4 }, { x: 'Time (24hrs)', y: 'Temperature in °C', graphTitle: '  Hourly Temperature' }, { tooltipFunc: customTooltip, tooltipData: plots.details });
+  let hr_graph = graph(h_graphEle, plots, { borderColor: 'rgba(255,255,0,1)', backgroundColor: 'rgba(0, 255, 0, 1)', pntStyle: 'circle', radius: 5 }, { x: 'Time (24hrs)', y: 'Temperature in °C', graphTitle: '  Hourly Temperature' }, { tooltipFunc: customTooltip, tooltipData: plots.details });
 
   return true;
 }
 
-function graph(ctx, plots, styling, title, tooltipContent) {
+
+function graph(cnv, plots, styling, title, tooltipContent) {
   let showTicks = true;
-  let showGrid = false;
+  let showGrid = false; // don't show grids on chart area
+  let showBorder = false; // don't show defalut border lines
   let gridColor = 'rgba(0,0,0,1)';
   Chart.defaults.font.size = 16;
+  Chart.defaults.font.weight = "6";
   Chart.defaults.borderColor = 'rgba(0,0,0,1)';
 
-  let myChart = new Chart(ctx, {
+  let scaleBgColor = "rgba(255,255,255,0.5)";
+
+  let ctx = cnv.getContext("2d");
+
+  // plugin to make scale background
+  Chart.register({
+    id: "scalecolor",
+    beforeDraw: function (chart, easing) {
+      if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor && chart.config.options.chartArea.fullScale) {
+        var helpers = Chart.helpers;
+        var ctx = chart.ctx;
+        var chartArea = chart.chartArea;
+
+        ctx.save();
+
+        ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+        ctx.fillRect(chartArea.left, chartArea.top, chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
+        ctx.fillStyle = chart.config.options.chartArea.fullScale;
+        ctx.fillRect(0,0,chartArea.left,chartArea.bottom);
+        ctx.fillRect(0,chartArea.bottom,cnv.width,cnv.height-chartArea.bottom);
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000000';
+
+        // y axis scale line
+        ctx.beginPath();
+        ctx.moveTo(chartArea.left,0);
+        ctx.lineTo(chartArea.left,chartArea.bottom);
+        ctx.stroke();
+
+        // x axis scale line
+        ctx.beginPath();
+        ctx.moveTo(chartArea.left,chartArea.bottom);
+        ctx.lineTo(cnv.width,chartArea.bottom);
+        ctx.stroke();
+        
+        ctx.restore();
+      }
+    }
+  });
+
+  let myChart = new Chart(cnv, {
     type: 'line',
     data: {
       labels: plots.xlabels,
@@ -298,7 +402,7 @@ function graph(ctx, plots, styling, title, tooltipContent) {
         x: {
           grid: {
             display: showTicks, // display the x grids or not
-            drawBorder: true,
+            drawBorder: showBorder,
             drawOnChartArea: true,
             drawTicks: true,
             color: gridColor,
@@ -321,7 +425,7 @@ function graph(ctx, plots, styling, title, tooltipContent) {
           weight: 10,
           grid: {
             display: showTicks, // display the y grids or not
-            drawBorder: true,
+            drawBorder: showBorder,
             drawOnChartArea: true,
             drawTicks: true,
             color: gridColor,
@@ -333,14 +437,19 @@ function graph(ctx, plots, styling, title, tooltipContent) {
             color: gridColor
           },
           ticks: {
+            textStrokeWidth : 1,
             color: gridColor,
-            padding: 10
+            padding: 10,
           }
         }
+      },
+      chartArea: {
+        backgroundColor: 'rgba(0,0,0,0)',
+        fullScale: scaleBgColor
       }
     }
   });
-  ctx.style.display = "block";
+  cnv.style.display = "block";
   return myChart;
 }
 
@@ -365,7 +474,7 @@ document.getElementById("ShowHide").addEventListener("click", function(){
       document.getElementById("graph-loading").innerHTML = "";
       container.scrollIntoView({behavior: 'smooth'});
     });
-    document.getElementById("graph-loading").innerHTML = "Loading...";
+    document.getElementById("graph-loading").innerHTML = "<div class='loader'></div>";
   }
   else{
     $("#chartBase").toggle();

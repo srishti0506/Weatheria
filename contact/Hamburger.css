@@ -10,7 +10,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 }
 .Hamburger {
     position: absolute;
@@ -34,7 +33,7 @@ ul {
 
 }
 .Hamburger i {
-    height: 75px;
+    height: 60px;
     width: 220px;
     text-align: center;
     line-height: 50px;

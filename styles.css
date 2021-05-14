@@ -93,8 +93,8 @@ body {
 
 /* Card */
 .card {
-    /* background: #000000d0; */
-    background-image:  linear-gradient(135deg, #525558 0%, #19181a 74%);
+    background: #000000; 
+    /*background-image:  linear-gradient(135deg, #525558 0%, #19181a 74%);*/
     opacity: 0.99;
     color: white;
     padding: 2em;
@@ -271,7 +271,6 @@ h1.temp {
 header {
     min-height: 100vh;
     width: 100%;
-    background: url("Images/backup.jpg") no-repeat center ;
     position: relative;
 }
 
@@ -552,6 +551,8 @@ ul {
 #wish-text {
     font-size: 0px;
     color: rgb(255, 255, 255);
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: 8px 3px 9px #000000;
 }
 
 #weather-cloth {

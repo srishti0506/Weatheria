@@ -11,7 +11,7 @@ html {
 }
 
 body {
-  overflow: hidden;
+  overflow-x: hidden;
   /* background: url("images/backup.jpg") no-repeat  center  ; */
 }
 
